@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 2.8.11)
+set(PR_NAME quazip)
+
+add_definitions("-std=c++11")
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
+file(GLOB SRCS "*.c" "*.cpp")
+file(GLOB PUBLIC_HEADERS "*.h")
+
+#set(QUAZIP_LIB_VERSION 0.8.1)
+#set(QUAZIP_LIB_SOVERSION 1)
+
+ADD_DEFINITIONS(-DQUAZIP_BUILD)
+
+set(CMAKE_AUTOMOC ON)
+
+find_package(Qt5 COMPONENTS Core REQUIRED)
+if(Qt5Core_FOUND)
+    set(QTCORE_LIBRARIES ${Qt5Core_LIBRARIES})
+    set(QTCORE_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS})
+else()
+    message(FATAL_ERROR "Qt5 not found")
+endif()
+
+include_directories(${QTCORE_INCLUDE_DIRS})
+
+set(SRCS ${SRCS} ${MOC_SRCS})
+
+IF (WIN32)
+    IF (BUILD_SHARED_LIBS)
+        SET(Q_BUILD_TYPE "SHARED")
+    ENDIF()
+    
+    IF (BUILD_STATIC_LIBS)
+        add_definitions(-DQUAZIP_STATIC)
+        SET(Q_BUILD_TYPE "STATIC")
+    ENDIF()
+ENDIF()
+
+
+add_library(${PR_NAME} ${Q_BUILD_TYPE} ${SRCS})
+
+target_link_libraries(${PR_NAME} ${QTCORE_LIBRARIES} ${CONAN_LIBS})
+
+#target_link_libraries(${QUAZIP_LIB_TARGET_NAME} ${QT_QTMAIN_LIBRARY} ${QTCORE_LIBRARIES} ${ZLIB_LIBRARIES})
+
+install(FILES ${PUBLIC_HEADERS} DESTINATION include/quazip)
+install(TARGETS ${PR_NAME} RUNTIME DESTINATION bin)
+install(TARGETS ${PR_NAME} LIBRARY DESTINATION lib)
+
