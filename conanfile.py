@@ -76,5 +76,5 @@ class QuazipConan(ConanFile):
             self.cpp_info.defines.append('QUAZIP_STATIC')
             
         self.cpp_info.libs = tools.collect_libs(self)
-
+        self.cpp_info.bindirs = ['bin']
             
