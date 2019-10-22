@@ -23,7 +23,8 @@ class QuazipConan(ConanFile):
     default_options = { 'shared': True, 
                         'fPIC': False,
                         'qt:shared': True,
-                        'zlib:shared': False }
+                        'zlib:shared': False,
+                        'qt:with_odbc': False }
                         
                         
     exports_sources = ["CMakeLists.txt", "CMakeLists-upstream.txt"]
