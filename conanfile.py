@@ -15,7 +15,7 @@ class QuazipConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"  
     
-    requires = "zlib/1.2.11@conan/stable", "qt/5.13.1@bincrafters/stable"
+    requires = "zlib/1.2.11@conan/stable", "qt/5.13.2@bincrafters/stable"
 
     options = { "shared": [True, False], 
                 "fPIC": [True, False] }
