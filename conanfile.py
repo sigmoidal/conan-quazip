@@ -24,7 +24,7 @@ class QuazipConan(ConanFile):
                         'fPIC': False,
                         'qt:shared': True,
                         'zlib:shared': False,
-                        "qt:with_sqlite3": False,
+                        "qt:with_sqlite3": True,
                         "qt:with_odbc": False,  
                         "qt:with_pq": False,  
                         "qt:with_mysql": False,
