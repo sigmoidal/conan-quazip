@@ -13,14 +13,14 @@ class QuazipConan(ConanFile):
     homepage = "https://github.com/stachenov/quazip"
     description = "QuaZIP is the C++ wrapper for Gilles Vollant's ZIP/UNZIP package (AKA Minizip) using Trolltech's Qt library."
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake"  
-    
+    generators = "cmake"
+
     requires = "zlib/1.2.11@conan/stable", "qt/5.13.2@bincrafters/stable"
 
-    options = { "shared": [True, False], 
+    options = { "shared": [True, False],
                 "fPIC": [True, False] }
 
-    default_options = { 'shared': True, 
+    default_options = { 'shared': True,
                         'fPIC': False,
                         'qt:shared': True,
                         'zlib:shared': False,
@@ -30,16 +30,15 @@ class QuazipConan(ConanFile):
                         "qt:with_mysql": False,
                         "qt:with_sdl2": False,  
                         "qt:with_openal": False }
-                        
+
     exports_sources = ["CMakeLists.txt", "CMakeLists-upstream.txt"]
-    
+
     _source_subfolder = "source_subfolder"
-    
-                
+
+
     def configure(self):
         if self.settings.compiler == 'Visual Studio':
             del self.options.fPIC
-            
 
     def source(self):
         sha256 = "4fda4d4248e08015b5090d0369ef9e68bdc4475aa12494f7c0f6d79e43270d14"
@@ -54,17 +53,16 @@ class QuazipConan(ConanFile):
     def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["QUAZIP_BUILD"] = True
-            
+
         if not self.options.shared:
             cmake.definitions["QUAZIP_STATIC"] = True
 
         cmake.definitions["BUILD_STATIC_LIBS"] = not self.options.shared
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
-              
-        cmake.configure()        
+
+        cmake.configure()
         return cmake
 
-        
     def build(self):
         cmake = self._configure_cmake()
         cmake.build()
@@ -79,7 +77,7 @@ class QuazipConan(ConanFile):
     def package_info(self):
         if not self.options.shared:
             self.cpp_info.defines.append('QUAZIP_STATIC')
-            
+
         self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.bindirs = ['bin']
-            
+        self.cpp_info.libdirs = ['lib']
