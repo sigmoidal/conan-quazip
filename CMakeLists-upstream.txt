@@ -57,7 +57,15 @@ set_property(
     "@executable_path"
     "@executable_path/../Frameworks"
 )
+else()
+    set_property(
+        TARGET ${PR_NAME}
+        PROPERTY INSTALL_RPATH
+        "$ORIGIN"
+    )
 endif()
+
+
 
 install(FILES ${PUBLIC_HEADERS} DESTINATION include/quazip)
 install(TARGETS ${PR_NAME} 
