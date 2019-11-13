@@ -4,7 +4,7 @@ set(PR_NAME quazip)
 #add_definitions("-std=c++11")
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+conan_basic_setup(KEEP_RPATHS)
 
 file(GLOB SRCS "*.c" "*.cpp")
 file(GLOB PUBLIC_HEADERS "*.h")
@@ -41,19 +41,23 @@ ENDIF()
 
 
 add_library(${PR_NAME} ${Q_BUILD_TYPE} ${SRCS})
-
+set_target_properties(${PR_NAME} PROPERTIES MACOSX_RPATH 1)
 target_link_libraries(${PR_NAME} ${QTCORE_LIBRARIES} ${CONAN_LIBS})
 
 #target_link_libraries(${QUAZIP_LIB_TARGET_NAME} ${QT_QTMAIN_LIBRARY} ${QTCORE_LIBRARIES} ${ZLIB_LIBRARIES})
 
-if (APPLE)
-    set_property(
-        TARGET ${PR_NAME}
-        PROPERTY INSTALL_RPATH
-        "@loader_path"
-        "@executable_path/../Frameworks"
-    )
-endif ()
+
+set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+
+if(APPLE)
+set_property(
+    TARGET ${PR_NAME}
+    PROPERTY INSTALL_RPATH
+    "@loader_path"
+    "@executable_path"
+    "@executable_path/../Frameworks"
+)
+endif()
 
 install(FILES ${PUBLIC_HEADERS} DESTINATION include/quazip)
 install(TARGETS ${PR_NAME} 

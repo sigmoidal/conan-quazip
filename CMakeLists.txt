@@ -3,6 +3,6 @@ project(cmake_wrapper)
 
 message(STATUS "Conan CMake Wrapper")
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+conan_basic_setup(KEEP_RPATHS)
 
 add_subdirectory("source_subfolder")
